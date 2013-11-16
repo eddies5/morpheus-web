@@ -113,24 +113,25 @@ class Master(object):
                     logger.debug("SJBs: " + str(Master.UnScheduledSubJobs))
 
                 elif(message == "D"): # SUB-JOB COMPLETION
-                    print 'D message'
+
                     jobID, subJobID, result = data[1:].split(',')
-                    logger.debug("Request: D, for job ID: " + jobID + ", " + subJobID + " done.")
+                    logger.debug("Request: D, for job ID: " + jobID + "-" + subJobID + " done.")
                     key = "{jId}.{sjid}".format(jId=jobID,sjid=subJobID)
                     Master.scheduledLock.acquire()
                     subJob = Master.ScheduledSubJobs.pop(key, None)
                     Master.scheduledLock.release()
                     message = 'F'
                     if subJob:
-                        print 'sub job exists'
+                        logger.debug('Job Exists: ' + jobID +"-"subJobID)
                         message = 'S'
                         Master.resultLock.acquire()
                         Master.results[jobID] = Master.results.get(jobID, 0) + int(result)
                         Master.resultLock.release()
                         Master.counterLock.acquire()
-                        print Master.subJobCounter
                         int_jobID = int(jobID)
                         Master.subJobCounter[int_jobID] -= 1
+
+                        logger.debug(str(Master.subJobCounter))
                         if Master.subJobCounter[int_jobID] == 0:
                             message = 'Z' + (jobID+','+str(Master.results.get(jobID)))
                         Master.counterLock.release()
@@ -149,7 +150,7 @@ class Master(object):
     def __init__(self):
         self.host = 'localhost'
         self.port = 5000
-        self.backlog = 5
+        self.backlog = 20
         self.size = 1024
         self.server = None
         self.threads = []
