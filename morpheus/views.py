@@ -20,7 +20,7 @@ def job_submit(request):
 
     with open(file_name, 'w') as fout:
         pickle.dump(job, fout)
-    record = JobRecord(obj_name=file_name,status=False)
+    record = JobRecord(obj_name=file_name, status=False)
     record.save()
 
     #inform master about new job
@@ -39,9 +39,11 @@ def home(request):
 
 
 def check_status(request):
-    job = JobEntry.objects.filter(pk=request.GET['job_id'])
+    print request.GET['job_id']
+    job = JobRecord.objects.filter(pk=request.GET['job_id'])
     res = {'status' : 'no_job'}
-    if job:
-        res['status'] = job.status
+    if len(job) == 1:
+        # print job[0].status
+        res['status'] = job[0].status
 
     return HttpResponse(json.dumps(res), mimetype="application/json")

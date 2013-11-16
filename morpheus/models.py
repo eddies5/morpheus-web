@@ -2,6 +2,6 @@ from django.db import models
 
 # Create your models here.
 class JobRecord(models.Model):
-    status=models.BooleanField()
+    status = models.BooleanField()
     result = models.CharField(max_length=255, blank=True,verbose_name='Calculation Result')
     obj_name = models.CharField(max_length=32, blank=False)

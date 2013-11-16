@@ -6,7 +6,6 @@ from morpheus.views import job_submit, check_status
 
 urlpatterns = patterns('',
     url(r'^submit$', job_submit),
-    # Examples:
     url(r'^$', 'morpheus.views.home', name='home'),
     url(r'^status$', check_status)
     # url(r'^morpheusweb/', include('morpheusweb.foo.urls')),
