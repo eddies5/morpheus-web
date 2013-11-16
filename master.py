@@ -9,6 +9,7 @@ import sys
 import threading 
 import pickle
 
+
 # master class to partition, schedule jobs
 class Master(object):
     def __init__(self): 
@@ -65,6 +66,18 @@ class ClientHandler(threading.Thread):
         self.client = client 
         self.address = address 
         self.size = 1024 
+        self.subJobs = {}
+
+    def partitionJob(je) :
+        subQueue   = Queue()
+        dataParts  = je._data.split('\n')
+        counter    = 0
+        for dataPart in dataParts :
+            self.subJobs[counter] = SubJobEntry(je.func, dataParts, je._id)
+            subQueue.put(counter)
+            counter += 1
+
+        return subQueue
 
     def run(self): 
         running = 1 
@@ -118,9 +131,10 @@ class JobEntry(object):
         self._subJobIds = ids
 
 class SubJobEntry(object):
-    def __init__(self, func, data, id):
-        self._func = func
-        self._data = data
-        self._id = id
+    def __init__(self, func, data, id, counter):
+        self._func    = func
+        self._data    = data
+        self._id      = id
+        self._counter = counter
 
 
