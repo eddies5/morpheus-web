@@ -1,6 +1,57 @@
+<<<<<<< HEAD
 2013-11-16 07:17:19,363 - MORPHEUS - DEBUG - Request: S, job0
 2013-11-16 07:17:19,379 - MORPHEUS - DEBUG - SJBs: deque([<morpheus.JobEntry.SubJobEntry object at 0x106774990>, <morpheus.JobEntry.SubJobEntry object at 0x106774ad0>, <morpheus.JobEntry.SubJobEntry object at 0x106774cd0>])
 2013-11-16 07:20:26,545 - MORPHEUS - DEBUG - Request: S, job1
 2013-11-16 07:20:26,548 - MORPHEUS - DEBUG - SJBs: deque([<morpheus.JobEntry.SubJobEntry object at 0x1076569d0>, <morpheus.JobEntry.SubJobEntry object at 0x107656990>, <morpheus.JobEntry.SubJobEntry object at 0x107656ad0>])
 2013-11-16 07:26:13,008 - MORPHEUS - DEBUG - Request: S, job2
 2013-11-16 07:26:13,010 - MORPHEUS - DEBUG - SJBs: deque([<morpheus.JobEntry.SubJobEntry object at 0x1012e7990>, <morpheus.JobEntry.SubJobEntry object at 0x1012e7ad0>, <morpheus.JobEntry.SubJobEntry object at 0x1012e7cd0>])
+=======
+2013-11-16 06:09:51,604 - MORPHEUS - DEBUG - Request: A.
+2013-11-16 06:11:58,548 - MORPHEUS - DEBUG - Could not open socket: Address already in use
+2013-11-16 06:13:24,784 - MORPHEUS - DEBUG - Request: A.
+2013-11-16 06:15:04,017 - MORPHEUS - DEBUG - Request: S, job0
+2013-11-16 06:15:04,018 - MORPHEUS - DEBUG - SJBs: deque([<morpheus.JobEntry.SubJobEntry object at 0x107052750>, <morpheus.JobEntry.SubJobEntry object at 0x107052590>, <morpheus.JobEntry.SubJobEntry object at 0x1070527d0>])
+2013-11-16 06:15:07,522 - MORPHEUS - DEBUG - Request: A.
+2013-11-16 06:15:07,522 - MORPHEUS - DEBUG - Job Scheduled: Job ID: 0subJob ID: 2
+2013-11-16 06:15:12,980 - MORPHEUS - DEBUG - putting back key--->>0.2
+2013-11-16 06:16:21,421 - MORPHEUS - DEBUG - Request: A.
+2013-11-16 06:16:21,421 - MORPHEUS - DEBUG - Job Scheduled: Job ID: 0subJob ID: 2
+2013-11-16 06:16:27,989 - MORPHEUS - DEBUG - putting back key--->>0.2
+2013-11-16 06:20:15,989 - MORPHEUS - DEBUG - Request: A.
+2013-11-16 06:20:15,989 - MORPHEUS - DEBUG - Job Scheduled: Job ID: 0subJob ID: 2
+2013-11-16 06:20:28,016 - MORPHEUS - DEBUG - putting back key--->>0.2
+2013-11-16 06:20:51,589 - MORPHEUS - DEBUG - Request: A.
+2013-11-16 06:20:51,589 - MORPHEUS - DEBUG - Job Scheduled: Job ID: 0subJob ID: 2
+2013-11-16 06:20:58,019 - MORPHEUS - DEBUG - putting back key--->>0.2
+2013-11-16 06:21:43,362 - MORPHEUS - DEBUG - Request: A.
+2013-11-16 06:21:43,363 - MORPHEUS - DEBUG - Job Scheduled: Job ID: 0subJob ID: 2
+2013-11-16 06:21:58,026 - MORPHEUS - DEBUG - putting back key--->>0.2
+2013-11-16 06:27:34,566 - MORPHEUS - DEBUG - Request: A.
+2013-11-16 06:27:34,566 - MORPHEUS - DEBUG - Job Scheduled: Job ID: 0subJob ID: 2
+2013-11-16 06:27:43,063 - MORPHEUS - DEBUG - putting back key--->>0.2
+2013-11-16 06:36:36,183 - MORPHEUS - DEBUG - Request: A.
+2013-11-16 06:36:36,184 - MORPHEUS - DEBUG - Job Scheduled: Job ID: 0subJob ID: 2
+2013-11-16 06:36:43,125 - MORPHEUS - DEBUG - putting back key--->>0.2
+2013-11-16 06:36:58,746 - MORPHEUS - DEBUG - Request: A.
+2013-11-16 06:36:58,746 - MORPHEUS - DEBUG - Job Scheduled: Job ID: 0subJob ID: 2
+2013-11-16 06:37:13,127 - MORPHEUS - DEBUG - putting back key--->>0.2
+2013-11-16 06:43:25,616 - MORPHEUS - DEBUG - Request: S, job1
+2013-11-16 06:43:25,619 - MORPHEUS - DEBUG - SJBs: deque([<morpheus.JobEntry.SubJobEntry object at 0x104a6b590>, <morpheus.JobEntry.SubJobEntry object at 0x104a6b7d0>, <morpheus.JobEntry.SubJobEntry object at 0x104a6ba50>])
+2013-11-16 06:43:28,803 - MORPHEUS - DEBUG - Request: A.
+2013-11-16 06:43:28,803 - MORPHEUS - DEBUG - Job Scheduled: Job ID: 1subJob ID: 2
+2013-11-16 06:43:31,838 - MORPHEUS - DEBUG - Request: D, for job ID: ,  done.
+2013-11-16 06:43:31,839 - MORPHEUS - DEBUG - Request: D, for job ID: ,  done.
+2013-11-16 06:43:31,839 - MORPHEUS - DEBUG - Request: D, for job ID: ,  done.
+2013-11-16 06:43:35,282 - MORPHEUS - DEBUG - putting back key--->>1.2
+2013-11-16 06:47:35,214 - MORPHEUS - DEBUG - Could not open socket: Address already in use
+2013-11-16 06:48:50,733 - MORPHEUS - DEBUG - Request: S, job2
+2013-11-16 06:48:50,734 - MORPHEUS - DEBUG - SJBs: deque([<morpheus.JobEntry.SubJobEntry object at 0x102e92710>, <morpheus.JobEntry.SubJobEntry object at 0x102e92790>, <morpheus.JobEntry.SubJobEntry object at 0x102e927d0>])
+2013-11-16 07:03:06,432 - MORPHEUS - DEBUG - Request: S, job3
+2013-11-16 07:03:06,433 - MORPHEUS - DEBUG - SJBs: deque([<morpheus.JobEntry.SubJobEntry object at 0x10ee92710>, <morpheus.JobEntry.SubJobEntry object at 0x10ee92790>, <morpheus.JobEntry.SubJobEntry object at 0x10ee927d0>])
+2013-11-16 07:03:09,472 - MORPHEUS - DEBUG - Request: A.
+2013-11-16 07:03:09,472 - MORPHEUS - DEBUG - Job Scheduled: Job ID: 3subJob ID: 2
+2013-11-16 07:03:12,504 - MORPHEUS - DEBUG - Request: D, for job ID: ,  done.
+2013-11-16 07:03:12,506 - MORPHEUS - DEBUG - Request: D, for job ID: ,  done.
+2013-11-16 07:03:12,506 - MORPHEUS - DEBUG - Request: D, for job ID: ,  done.
+2013-11-16 07:03:14,510 - MORPHEUS - DEBUG - putting back key--->>3.2
+>>>>>>> 812b79e8181b13d04c9445536fd1e625dd100207
