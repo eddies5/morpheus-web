@@ -10,9 +10,6 @@ var main = function(data) {
     for(var i = 0; i < data.length; ++i) {
         sum += parseInt(data[i]);
     }
-    for(var j = 0; j < 1000000000; ++j) {
-        delay += j;
-    }
     return returnAsyncResult(sum);
 }
 
