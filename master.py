@@ -41,6 +41,7 @@ class Master(object):
             threading.Thread.__init__(self)
 
         def run(self):
+            print 'Rescheduler!!!'
             while 1:
                 sleep(15)
                 sLock = Master.scheduledLock
@@ -49,6 +50,8 @@ class Master(object):
                 for key in sJobs.keys():
                     Master.UnScheduledSubJobs.append(sJobs.pop(key))
                     logger.debug("putting back key--->>" + key)
+                print 'Moved elements back'
+                print len(Master.ScheduledSubJobs)
                 sLock.release()
 
 
@@ -67,6 +70,7 @@ class Master(object):
             return len(dataParts)
 
         def run(self):
+            print 'Slave started work'
             data = self.client.recv(self.size)
             if data:
                 message = data[0]
@@ -100,7 +104,7 @@ class Master(object):
                     logger.debug("SJBs: " + str(Master.UnScheduledSubJobs))
 
                 elif(message == "D"): # SUB-JOB COMPLETION
-
+                    print 'D message'
                     jobID, subJobID, result = data[1:].split(',')
                     logger.debug("Request: D, for job ID: " + jobID + ", " + subJobID + " done.")
                     key = "{jId}.{sjid}".format(jId=jobID,sjid=subJobID)
@@ -109,14 +113,17 @@ class Master(object):
                     Master.scheduledLock.release()
                     message = 'F'
                     if subJob:
+                        print 'sub job exists'
                         message = 'S'
                         Master.resultLock.acquire()
-                        Master.results.put(jobID, results.get(jobID, 0) + int(result))
+                        Master.results[jobID] = Master.results.get(jobID, 0) + int(result)
                         Master.resultLock.release()
                         Master.counterLock.acquire()
-                        Master.subJobCounter[jobID] -= 1
-                        if Master.subJobCounter[jobID] == 0:
-                            message = 'Z' + (str(jobID)+','+str(Master.results.get(jobID)))
+                        print Master.subJobCounter
+                        int_jobID = int(jobID)
+                        Master.subJobCounter[int_jobID] -= 1
+                        if Master.subJobCounter[int_jobID] == 0:
+                            message = 'Z' + (jobID+','+str(Master.results.get(jobID)))
                         Master.counterLock.release()
 
                     # subjob done
