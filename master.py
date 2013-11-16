@@ -42,7 +42,7 @@ class Master(object):
 
                 if s == self.server: 
                     # handle the server socket: s.accept() returns client, address
-                    c = Worker(self.server.accept()) 
+                    c = ClientHandler(self.server.accept()) 
                     c.start() 
                     self.threads.append(c) 
 
@@ -59,7 +59,7 @@ class Master(object):
 
 # messages: heartbeat: H (from phone), job submission: S (from eddie), I am done: D (phone)
 
-class Worker(threading.Thread): 
+class ClientHandler(threading.Thread): 
     def __init__(self, (client, address)): 
         threading.Thread.__init__(self) 
         self.client = client 
@@ -72,20 +72,18 @@ class Worker(threading.Thread):
             data = self.client.recv(self.size)
             if data: 
                 m = data[0]
-                if(m =="H") 
+                if(m =="H"):
                     #hearbeat
-                    
                     self.client.close() 
                     running = 0 
-                elif(m=="S")
-                    self.client.send("send filename")
+                elif(m=="S"):
                     filename = self.client.recv(self.size)
                     je = pickle.load(filename)
-                    #job submission
+                    q = partitionJob(je)
+                    #method that split split the job
                     self.client.close() 
                     running = 0 
-                elif(m=="D")
-                    self.client.send("send id")
+                elif(m=="D"):
                     jobID = self.client.recv(self.size)
                     # subjob done
                     self.client.close() 
@@ -106,5 +104,16 @@ class JobEntry(object):
         self._func = func
         self._data = data
 
-    def set_id(self, id):
+    def setId(self, id):
         self._id = id
+
+    def setSubJobIds(self, ids):
+        self._subJobIds = ids
+
+class SubJobEntry(object):
+    def __init__(self, func, data, id):
+        self._func = func
+        self._data = data
+        self._id = id
+
+
