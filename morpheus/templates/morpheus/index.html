@@ -1,65 +1,71 @@
 {% load staticfiles %}
 
-<html>
-<head>
-	<title>MMR</title>
-	<!-- Latest compiled and minified CSS -->
-	<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css">
-	<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-	<script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
-	<!-- Latest compiled and minified JavaScript -->
-	<script src="//netdna.bootstrapcdn.com/bootstrap/3.0.2/js/bootstrap.min.js"></script>
-</head>
-<body>
-	<div class="container">
+<!DOCTYPE html>
+<html lang="en" class="no-js">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"> 
+		<meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+		<title>MMR</title>
+		<meta name="description" content="Blueprint: Split Layout" />
+		<meta name="keywords" content="website template, layout, css3, transition, effect, split, dual, two sides, portfolio" />
+		<meta name="author" content="Codrops" />
+		<link rel="shortcut icon" href="../favicon.ico">
+		<link rel="stylesheet" type="text/css" href="{% static '/static/css/demo.css' %}" />
+		<link rel="stylesheet" type="text/css" href="{% static '/static/css/component.css' %}" />
+		<!-- Latest compiled and minified CSS -->
+		<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css">
+		<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+		<script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+		<!-- Latest compiled and minified JavaScript -->
+		<script src="//netdna.bootstrapcdn.com/bootstrap/3.0.2/js/bootstrap.min.js"></script>
+	</head>
+	<body>
+		<div class="container">
+			<div id="splitlayout" class="splitlayout">
+				<div class="intro">
+					<div class="side side-left">
+							<h1>Morpheus</h1>
+						<div class="intro-content">
 
-		<div class="row">
-			<div class="col-md-12">
-				<h1>MMR</h1>
-				<div>
-					
-					  <div >
-					    <label >Job ID: </label>
-					    <input type="text" id="job_id" placeholder="Enter Job ID">
-					    <div id="jobResult"></div>
-					  </div>
-					  <button type="submit" id="jobCheck" class="btn btn-default">Check</button>
-					
-				</div>
-			</div>
-		</div>
+							<h2>Data<small style="color:#D5D2D2"> Space separated tokens</small></h2>
+							<form role="form">
+							  <div class="form-group">
+							    <textarea id="inData" class="form-control" rows="3"></textarea>
+							  </div>
+							</form>
 
-		<div class="row">
-		  <div class="col-md-6">
-		  	<h2>Data<small> Space separated tokens</small></h2>
-		  	<form role="form">
-		  	  <div class="form-group">
-		  	    <textarea id="inData" class="form-control" rows="3"></textarea>
-		  	  </div>
-		  	</form>
-		  </div>
-		  <div class="col-md-6">
-		  	<h2>Algorithm<small> Except data to be array of Strings</small></h2>
-		  	<form role="form">
-		  	  <div class="form-group">
-		  	    <textarea id="algo" class="form-control" rows="3"></textarea>
-		  	  </div>
-		  	</form>
-		  </div>
-		</div>
+							<button type="button" class="btn btn-default btn-lg">Validate!</button>
 
-		<div class="row">
-			<div class="col-md-12">
-				<button id="submitButton" type="button" class="btn btn-primary">MMR!</button>
-			</div>
-		</div>
-		<br>
-		<div class="row">
-			<div class="col-md-12">
-				<button id="testButton" type="button" class="btn btn-primary">testMMR!</button>
-			</div>
-		</div>
+
+						</div>
+						<div class="overlay"></div>
+					</div>
+					<div class="side side-right">
+						<div class="intro-content">
+
+							<h2>Algorithm<small> function(String[]){}</small></h2>
+							<form role="form">
+							  <div class="form-group">
+							    <textarea id="algo" class="form-control" rows="3"></textarea>
+							  </div>
+							</form>
+
+							<button id="submitButton" type="button" class="btn btn-default btn-lg">Submit!</button>
+
+						</div>
+						<div class="overlay"></div>
+						<div>
+						  <label >Job ID: </label>
+						  <input type="text" id="job_id" placeholder="Enter Job ID">
+						  <div id="jobResult"></div>
+						</div>
+						<button type="submit" id="jobCheck" class="btn btn-default">Check</button>
+					</div>
+				</div><!-- /intro -->
+				
+			</div><!-- /splitlayout -->
+		</div><!-- /container -->
 		<script type="text/javascript" src="{% static '/static/js/actions.js' %}"></script>
-	</div>
-</body>
+	</body>
 </html>

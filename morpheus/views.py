@@ -32,10 +32,8 @@ def job_submit(request):
     json_data = json.dumps({'job_id' : record.pk})
     return HttpResponse(json_data, mimetype="application/json")
 
-
-def home(request):
-	return render(request, 'morpheus/index.html')
-
+def home(request) :
+    return render(request, 'morpheus/index.html')
 
 def check_status(request):
     print request.GET['job_id']
@@ -93,7 +91,6 @@ def send_money(phone_number):
     print transactionId
 
 def completion(request):
-
     message = 'D' + ','.join([request.GET.get('jobID',''),
                                 request.GET.get('subJobID',''),
                                 request.GET.get('result', '0')])
