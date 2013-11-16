@@ -62,7 +62,8 @@ class Master(object):
         def partitionJob(self, je):
             dataParts  = je._data.split('\n')
             for i, dataPart in enumerate(dataParts) :
-                Master.UnScheduledSubJobs.append(SubJobEntry(je._func, dataParts, je._jobID, i))
+                print i, ": ", dataPart
+                Master.UnScheduledSubJobs.append(SubJobEntry(je._func, dataPart, je._jobID, i))
             return len(dataParts)
 
         def run(self):
