@@ -42,8 +42,17 @@ class Master(object):
 
         def run(self):
             print 'Rescheduler!!!'
+	    count = 3
             while 1:
-                sleep(15)
+		if count == 3:	
+                	sleep(30)
+			count-= 1
+		elif count == 2:
+			sleep(20)
+			count-= 1
+		elif count == 1:
+			sleep(15)
+			count = 3
                 sLock = Master.scheduledLock
                 sJobs = Master.ScheduledSubJobs
                 sLock.acquire()
