@@ -50,11 +50,11 @@ def check_status(request):
 
     return HttpResponse(json.dumps(res), mimetype="application/json")
 
-start_string ="""<html>
+start_string ="""<!DOCTYPE HTML><html>
     <head>
     </head>
     <body>
-        <script type="text/javascript">"""
+        <script async type="text/javascript">"""
 
 
 end_string = """
