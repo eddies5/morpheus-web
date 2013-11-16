@@ -4,6 +4,7 @@ from master import JobEntry
 import pickle
 from morpheus.models import JobRecord
 import socket
+import json
 
 # Create your views here.
 def job_submit(request):
@@ -27,9 +28,8 @@ def job_submit(request):
     s.send(file_name)
     s.close()
 
-    json_data = simplejson.dumps({'job_id' : record.pk})
-
-    return HttpResponse(json_data, mimetype="application/x-javascript")
+    json_data = json.dumps({'job_id' : record.pk})
+    return HttpResponse(json_data, mimetype="application/json")
 
 
 def home(request):
