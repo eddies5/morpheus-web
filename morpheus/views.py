@@ -75,7 +75,6 @@ def available(request):
     print data._subJobID
     print data._data
     print data._func
-    print json.dumps(data)
     s.close()
     function = start_string + data._func + end_string
     final_data = {'func' : function, 'data' : data._data,
@@ -101,7 +100,3 @@ def completion(request):
     print transactionId
 
     return HttpResponse(json.dumps({}), mimetype="application/json")
-
-def showtests(request):
-
-    pass

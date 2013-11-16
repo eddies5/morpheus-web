@@ -4,3 +4,12 @@
 2013-11-16 05:33:32,077 - MORPHEUS - DEBUG - Request: A.
 2013-11-16 05:34:16,702 - MORPHEUS - DEBUG - Request: A.
 2013-11-16 05:34:33,884 - MORPHEUS - DEBUG - Request: A.
+2013-11-16 06:01:09,694 - MORPHEUS - DEBUG - Request: S, job1
+2013-11-16 06:01:09,698 - MORPHEUS - DEBUG - SJBs: deque([<morpheus.JobEntry.SubJobEntry object at 0x10a7e2990>, <morpheus.JobEntry.SubJobEntry object at 0x10a7e2a90>, <morpheus.JobEntry.SubJobEntry object at 0x10a7e2c90>])
+2013-11-16 06:02:10,790 - MORPHEUS - DEBUG - Request: S, job2
+2013-11-16 06:02:10,802 - MORPHEUS - DEBUG - SJBs: deque([<morpheus.JobEntry.SubJobEntry object at 0x10ee50990>, <morpheus.JobEntry.SubJobEntry object at 0x10ee50ad0>, <morpheus.JobEntry.SubJobEntry object at 0x10ee50cd0>])
+2013-11-16 06:02:20,373 - MORPHEUS - DEBUG - Request: A.
+2013-11-16 06:02:20,373 - MORPHEUS - DEBUG - Job Scheduled: Job ID: 2subJob ID: 2
+2013-11-16 06:02:29,717 - MORPHEUS - DEBUG - putting back key--->>2.2
+2013-11-16 06:03:33,867 - MORPHEUS - DEBUG - Request: A.
+2013-11-16 06:03:33,867 - MORPHEUS - DEBUG - Job Scheduled: Job ID: 2subJob ID: 2
