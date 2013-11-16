@@ -77,3 +77,6 @@ def completion(request):
     print transactionId
     
     return HttpResponse(json.dumps({}), mimetype="application/json")
+
+def showtests(request):
+    pass
