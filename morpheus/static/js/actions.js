@@ -26,24 +26,14 @@
 
 	$('#testButton').click(function(event) {
 
-		func = $('#algo').val();
-		console.log(func);
-
-		data = $('#inData').val();
-		console.log(data);
-
 		$.ajax({
 			type: 'GET',
-			url: '/test',
-			data: {
-				'function': func,
-				'data': data,
-			},
+			url: '/available',
 			error: function(err) {
 				console.log(err);
 			},
 			success: function(data) {
-				console.log(data['job_id']);
+				console.log(data);
 			}
 		});
 
