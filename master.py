@@ -24,7 +24,8 @@ logger.addHandler(fh)
 class Master(object):
     ScheduledSubJobs = deque()
     UnScheduledSubJobs = deque()
-    Slaves = deque()
+    jobMap = {} # jobID -> subJobID -> Boolean
+    lock = Lock()
     
     class ClientHandler(threading.Thread): 
         def __init__(self, (client, address)): 
@@ -35,8 +36,12 @@ class Master(object):
 
         def partitionJob(self, je):
             dataParts  = je._data.split('\n')
+            lock.acquire()
+            jobMap[je._jobID] = {}
             for i, dataPart in enumerate(dataParts) :
                 Master.UnScheduledSubJobs.append(SubJobEntry(je._func, dataParts, je._jobID, i))
+                jobMap[je._jobID][i] = True
+            lock.release()
 
         def schedule(self):
             sjb = Master.UnScheduledSubJobs.pop()
@@ -49,27 +54,13 @@ class Master(object):
             if data: 
                 message = data[0]
                 
-                if(message == "A"):
+                if(message == "A"): # AVAILABILITY
                     logger.debug("Request: A.")
                     if len(Master.UnScheduledSubJobs):
                         sjb = self.schedule()
                         self.client.send(pickle.dumps(sbj))
                     else:
                         self.client.send("No job to do.")
-                    self.client.close() 
-                
-                elif(message == "H"): #HEART BEAT H123,5645
-                    ID = data[1:]
-                    logger.debug("Request: H, " + ID)
-                    # Put a slave or confirm existence
-                    if(ID == 0):
-                        if len(Master.UnScheduledSubJobs) != 0:
-                            sjb = self.schedule()
-                            self.client.send(sbj)
-                        else:
-                            self.client.send("NO job to do.")
-                    else:
-                        pass
                     self.client.close() 
 
                 elif(message == "S"): # JOB SUBMISSION
@@ -82,8 +73,12 @@ class Master(object):
                     logger.debug("SJBs: " + str(Master.UnScheduledSubJobs))
                 
                 elif(message == "D"): # SUB-JOB COMPLETION
-                    jobID = data[1:] #self.client.recv(self.size)
-                    logger.debug("Request: D, job ID: " + jobID + " done.")
+                    jobID, subJobID, result = data[1:]
+                    logger.debug("Request: D, for job ID: " + jobID + ", " + subJobID + " done.")
+                    lock.acquire()
+                    del jobMap[jobID][subJobID]
+                    ???
+                    lock.release()
                     # subjob done
                     self.client.close() 
                 
@@ -93,26 +88,6 @@ class Master(object):
             
             else: 
                 self.client.close() 
-    
-    class Scheduler(threading.Thread):
-        def __init__(self):
-            threading.Thread.__init__(self)
-            logger.debug("Created a scheduler.")
-
-        def run(self):
-            running = 1
-            while running:
-                while len(Master.UnScheduledSubJobs) != 0:
-                    self.schedule()
-
-        def schedule(self):
-            while len(Master.Slaves) != 0:
-                sjb = Master.UnScheduledSubJobs.pop()
-                #assign the sub job!
-                Master.ScheduledSubJobs.append(sbj)
-                logger.debug("Job Scheduled: Job ID: " + sbj._jobID + "subJob ID: " + sbj._subJobID)
-                break
-
             
     def __init__(self): 
         self.host = 'localhost' 
