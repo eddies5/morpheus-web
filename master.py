@@ -1,6 +1,6 @@
 #!/usr/bin/env python 
 
-# MANY THANKS TO http://ilab.cs.byu.edu/python/socket/echoserver.html
+# THANKS TO http://ilab.cs.byu.edu/python/socket/echoserver.html
 
 import select 
 import socket 
@@ -10,9 +10,13 @@ import pickle
 from collections import deque
 import logging
 
-logger = logging.getLogger('master')
+# THANKS TO http://www.shutupandship.com/2012/02/how-python-logging-module-works.html
+
+logger = logging.getLogger('MORPHEUS')
 logger.setLevel(logging.DEBUG)
+frmt = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 fh = logging.FileHandler('master.log')
+fh.setFormatter(frmt)
 fh.setLevel(logging.DEBUG)
 logger.addHandler(fh)
 
