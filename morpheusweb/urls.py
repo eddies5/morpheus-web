@@ -5,7 +5,7 @@ from morpheus.views import job_submit
 # admin.autodiscover()
 
 urlpatterns = patterns('',
-    url(r'^submit$', job_submit)
+    url(r'^submit$', job_submit),
     # Examples:
     url(r'^$', 'morpheus.views.home', name='home'),
     # url(r'^morpheusweb/', include('morpheusweb.foo.urls')),
