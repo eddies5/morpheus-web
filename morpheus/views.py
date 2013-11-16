@@ -51,14 +51,11 @@ start_string ="""<html>
     <head>
     </head>
     <body>
-        <script type="text/javascript">
-
-        var main = function(data) {"""
+        <script type="text/javascript">"""
 
 
 end_string = """
-        }
-
+        
         var returnAsyncResult = function(result) {
             window.location = 'result://localhost/' + result;
         }
