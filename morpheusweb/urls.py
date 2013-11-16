@@ -1,5 +1,5 @@
 from django.conf.urls import patterns, include, url
-from morpheus.views import job_submit, check_status, available
+from morpheus.views import job_submit, check_status, available, completion
 # Uncomment the next two lines to enable the admin:
 # from django.contrib import admin
 # admin.autodiscover()
@@ -8,7 +8,8 @@ urlpatterns = patterns('',
     url(r'^submit$', job_submit),
     url(r'^$', 'morpheus.views.home', name='home'),
     url(r'^status$', check_status),
-    url(r'available', available)
+    url(r'available', available),
+    url(r'completion', completion)
     # url(r'^morpheusweb/', include('morpheusweb.foo.urls')),
 
     # Uncomment the admin/doc line below to enable admin documentation:
