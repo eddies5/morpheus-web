@@ -1,4 +1,4 @@
-#!/usr/bin/python 
+#!/usr/bin/env python 
 
 # server socket in python
 # spit out threads (and not processes)
@@ -74,9 +74,12 @@ class ClientHandler(threading.Thread):
                 m = data[0]
                 if(m =="H"):
                     #hearbeat
+                    #print "H"
                     self.client.close() 
                     running = 0 
                 elif(m=="S"):
+                    #print "S"
+                    self.client.send("send the filename:")
                     filename = self.client.recv(self.size)
                     je = pickle.load(filename)
                     q = partitionJob(je)
@@ -84,11 +87,15 @@ class ClientHandler(threading.Thread):
                     self.client.close() 
                     running = 0 
                 elif(m=="D"):
+                    #print "D"
+                    self.client.send("send the ID:")
                     jobID = self.client.recv(self.size)
+                    print "job id: ", jobID
                     # subjob done
                     self.client.close() 
                     running = 0
                 else: 
+                    print "else"
                     self.client.close() 
                     running = 0 
             else: 
