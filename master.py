@@ -48,6 +48,7 @@ class Master(object):
                 sLock.acquire()
                 for key in sJobs.keys():
                     Master.UnScheduledSubJobs.append(sJobs.pop(key))
+                    logger.debug("putting back key--->>" + key)
                 sLock.release()
 
 
@@ -77,7 +78,7 @@ class Master(object):
                         Master.scheduledLock.acquire()
                         Master.ScheduledSubJobs[key] = sbj
                         Master.scheduledLock.release()
-                        logger.debug("Job Scheduled: Job ID: " + sbj._jobID + "subJob ID: " + sbj._subJobID)
+                        logger.debug("Job Scheduled: Job ID: " + str(sbj._jobID) + "subJob ID: " + str(sbj._subJobID))
                         self.client.send(pickle.dumps(sbj))
                     except IndexError:
                         self.client.send("No job to do.")
