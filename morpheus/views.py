@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect, Http404
-from JobEntry import JobEntry
+from JobEntry import JobEntry, SubJobEntry
 import pickle
 from models import JobRecord
 import socket
@@ -8,7 +8,7 @@ import json
 from dwolla import DwollaUser
 
 def job_submit(request):
-    
+
     #save file into object file
     number_of_records = JobRecord.objects.filter().count()
     file_name = 'job' + str(number_of_records)
@@ -47,16 +47,44 @@ def check_status(request):
 
     return HttpResponse(json.dumps(res), mimetype="application/json")
 
+start_string ="""<html>
+    <head>
+    </head>
+    <body>
+        <script type="text/javascript">
+
+        var main = function(data) {"""
+
+
+end_string = """
+        }
+
+        var returnAsyncResult = function(result) {
+            window.location = 'result://localhost/' + result;
+        }
+
+        </script>
+    </body>
+</html> """
+
 def available(request):
     #inform master about new slave
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     s.connect(('localhost', 5000))
     s.send('A')
     res = s.recv(1024)
-    pickle.loads(res)
+    data = pickle.loads(res)
+    print data._jobID
+    print data._subJobID
+    print data._data
+    print data._func
+    print json.dumps(data)
     s.close()
+    function = start_string + data._func + end_string
+    final_data = {'func' : function, 'data' : data._data,
+                    'jobID' : data._jobID, 'subJobID' : data._subJobID}
 
-    return HttpResponse(json.dumps(res), mimetype="application/json")
+    return HttpResponse(json.dumps(final_data), mimetype="application/json")
 
 def completion(request):
     # job_id, subjobid, result
@@ -74,9 +102,9 @@ def completion(request):
 
     transactionId = dw.send_funds(0.01, '812-908-5908', '4810')
     print transactionId
-    
+
     return HttpResponse(json.dumps({}), mimetype="application/json")
 
 def showtests(request):
-    
+
     pass
