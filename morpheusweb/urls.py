@@ -7,7 +7,7 @@ from morpheus.views import job_submit
 urlpatterns = patterns('',
     url(r'^submit$', job_submit)
     # Examples:
-    # url(r'^$', 'morpheusweb.views.home', name='home'),
+    url(r'^$', 'morpheus.views.home', name='home'),
     # url(r'^morpheusweb/', include('morpheusweb.foo.urls')),
 
     # Uncomment the admin/doc line below to enable admin documentation:

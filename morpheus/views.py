@@ -13,3 +13,6 @@ def job_submit(request):
         return HttpResponse('job saved successfully')
 
     return HttpResponse("Not a POST request")
+
+def home(request):
+	return render(request, 'morpheus/index.html')
