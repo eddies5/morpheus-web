@@ -54,10 +54,14 @@
 			},
 			success: function(data) {
 				console.log(data['status']);
-				if (!data['status']) {
-					$('#jobResult').text("not done");
+				if (data['status'] == "no_job") {
+					$('#jobResult').text("No such job.");
 				} else {
-					$('#jobResult').text("done");
+					if (data['status']) {
+						$('#jobResult').text(data['result']);
+					} else {
+						$('#jobResult').text("Not done");
+					}
 				}
 			}
 		});
