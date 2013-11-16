@@ -106,16 +106,16 @@ class Master(object):
                     Master.scheduledLock.acquire()
                     subJob = Master.ScheduledSubJobs.pop(key, None)
                     Master.scheduledLock.release()
-                    message = 'fail'
+                    message = 'F'
                     if subJob:
-                        message = 'success'
+                        message = 'S'
                         Master.resultLock.acquire()
                         Master.results.put(jobID, results.get(jobID, 0) + int(result))
                         Master.resultLock.release()
                         Master.counterLock.acquire()
                         Master.subJobCounter[jobID] -= 1
                         if Master.subJobCounter[jobID] == 0:
-                            message += (','+str(jobID)+','+str(Master.results.get(jobID)))
+                            message = 'Z' + (str(jobID)+','+str(Master.results.get(jobID)))
                         Master.counterLock.release()
 
                     # subjob done

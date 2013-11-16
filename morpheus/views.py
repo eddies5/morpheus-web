@@ -78,7 +78,7 @@ def available(request):
     print data._subJobID
     print data._data
     print data._func
-    print json.dumps(data)
+
     s.close()
     function = start_string + data._func + end_string
     final_data = {'func' : function, 'data' : data._data,
@@ -86,7 +86,35 @@ def available(request):
 
     return HttpResponse(json.dumps(final_data), mimetype="application/json")
 
+def send_money(phone_number):
+    dw = DwollaUser('CQOdqAEDtrRgUqPXdMmT4UL2BiCH6QPYX59mKelw6tKaN90uOH')
+    transactionId = dw.send_funds(0.01, phone_number, '4810')
+    print transactionId
+
 def completion(request):
+
+    message = 'D' + ','.join([request.GET.get('jobID',''),
+                                request.GET.get('subJobID',''),
+                                request.GET.get('result', '0')])
+    phone = request.GET.get('phone_number', '')
+    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    s.connect(('localhost', 5000))
+    s.send(message)
+    res = s.recv(1024)
+    if res[0] == 'S' and phone:
+        print 'success'
+        send_money(phone)
+        #send
+    elif res[0] == 'Z':
+        print 'job end '
+        job_id, result = res[1:].split(',')
+        send_money(phone)
+        job = JobRecord.objects.filter(pk=job_id)[0]
+        job.status = True
+        job.result = result
+        job.save()
+
+    s.close()
     # job_id, subjobid, result
     # phone number
     # s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -97,11 +125,6 @@ def completion(request):
     # s.send(request.GET['result'])
     # request.GET['phonenumber']
     # s.close()
-
-    dw = DwollaUser('CQOdqAEDtrRgUqPXdMmT4UL2BiCH6QPYX59mKelw6tKaN90uOH')
-
-    transactionId = dw.send_funds(0.01, '812-908-5908', '4810')
-    print transactionId
 
     return HttpResponse(json.dumps({}), mimetype="application/json")
 
