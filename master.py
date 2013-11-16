@@ -131,7 +131,7 @@ class Master(object):
                 if s == self.server: 
                     # handle the server socket: s.accept() returns client, address
                     c = Master.ClientHandler(self.server.accept()) 
-                    c.start() 
+                    c.start()
                     self.threads.append(c) 
 
                 elif s == sys.stdin: 
