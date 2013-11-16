@@ -7,13 +7,13 @@ import select
 import socket 
 import sys 
 import threading 
+import pickle
 
 # master class to partition, schedule jobs
 class Master(object):
-
-	def __init__(self): 
-        self.host = '' 
-        self.port = 50000 
+    def __init__(self): 
+        self.host = 'localhost' 
+        self.port = 5000 
         self.backlog = 5 
         self.size = 1024 
         self.server = None 
@@ -41,8 +41,8 @@ class Master(object):
             for s in inputready: 
 
                 if s == self.server: 
-                    # handle the server socket: client, address = s.accept()
-                    c = Client(self.server.accept()) 
+                    # handle the server socket: s.accept() returns client, address
+                    c = Worker(self.server.accept()) 
                     c.start() 
                     self.threads.append(c) 
 
@@ -57,8 +57,10 @@ class Master(object):
         for c in self.threads: 
             c.join() 
 
-class Client(threading.Thread): 
-    def __init__(self,(client,address)): 
+# messages: heartbeat: H (from phone), job submission: S (from eddie), I am done: D (phone)
+
+class Worker(threading.Thread): 
+    def __init__(self, (client, address)): 
         threading.Thread.__init__(self) 
         self.client = client 
         self.address = address 
@@ -67,18 +69,42 @@ class Client(threading.Thread):
     def run(self): 
         running = 1 
         while running: 
-            data = self.client.recv(self.size) 
+            data = self.client.recv(self.size)
             if data: 
-                self.client.send(data) 
+                m = data[0]
+                if(m =="H") 
+                    #hearbeat
+                    
+                    self.client.close() 
+                    running = 0 
+                elif(m=="S")
+                    self.client.send("send filename")
+                    filename = self.client.recv(self.size)
+                    je = pickle.load(filename)
+                    #job submission
+                    self.client.close() 
+                    running = 0 
+                elif(m=="D")
+                    self.client.send("send id")
+                    jobID = self.client.recv(self.size)
+                    # subjob done
+                    self.client.close() 
+                    running = 0
+                else: 
+                    self.client.close() 
+                    running = 0 
             else: 
                 self.client.close() 
                 running = 0 
 
 if __name__ == "__main__": 
-    s = Server() 
+    s = Master() 
     s.run()
 
 class JobEntry(object):
     def __init__(self, func, data):
         self._func = func
         self._data = data
+
+    def set_id(self, id):
+        self._id = id
