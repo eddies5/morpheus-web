@@ -6,6 +6,8 @@ from morpheus.models import JobRecord
 import socket
 import json
 
+
+
 # Create your views here.
 def job_submit(request):
 
@@ -34,3 +36,12 @@ def job_submit(request):
 
 def home(request):
 	return render(request, 'morpheus/index.html')
+
+
+def check_status(request):
+    job = JobEntry.objects.filter(pk=request.GET['job_id'])
+    res = {'status' : 'no_job'}
+    if job:
+        res['status'] = job.status
+
+    return HttpResponse(json.dumps(res), mimetype="application/json")
