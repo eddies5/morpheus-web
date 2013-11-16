@@ -10,6 +10,7 @@ import pickle
 from collections import deque
 import logging
 
+
 # THANKS TO http://www.shutupandship.com/2012/02/how-python-logging-module-works.html
 
 logger = logging.getLogger('MORPHEUS')
@@ -32,48 +33,66 @@ class Master(object):
             self.address = address 
             self.size = 1024 
 
-        def partitionJob(je) :
+        def partitionJob(self, je):
             dataParts  = je._data.split('\n')
             for i, dataPart in enumerate(dataParts) :
-                Master.UnScheduledSubJobs.append(SubJobEntry(je.func, dataParts, je._id, i))
+                Master.UnScheduledSubJobs.append(SubJobEntry(je._func, dataParts, je._jobID, i))
+
+        def schedule(self):
+            sjb = Master.UnScheduledSubJobs.pop()
+            Master.ScheduledSubJobs.append(sbj)
+            logger.debug("Job Scheduled: Job ID: " + sbj._jobID + "subJob ID: " + sbj._subJobID)
+            return sjb
 
         def run(self): 
-            running = 1 
-            while running: 
-                data = self.client.recv(self.size)
-                if data: 
-                    message = data[0]
-                    
-                    if(message == "H"): #HEART BEAT
-                        ID = data[1:]
-                        logger.debug("Request: H, " + ID)
-                        # CALL SOME METHOD
-                        self.client.close() 
-                        running = 0 
-                    
-                    elif(message == "S"): # JOB SUBMISSION
-                        filename = data[1:]
-                        je = pickle.load(filename)
-                        logger.debug("Request: S, " + filename)
-                        partitionJob(je)
-                        self.client.close() 
-                        running = 0 
-                    
-                    elif(message == "D"): # SUB-JOB COMPLETION
-                        jobID = data[1:] #self.client.recv(self.size)
-                        logger.debug("Request: D, job ID: " + jobID + " done.")
-                        # subjob done
-                        self.client.close() 
-                        running = 0
-                    
-                    else: 
-                        logger.debug("Invalid request.")
-                        self.client.close() 
-                        running = 0 
+            data = self.client.recv(self.size)
+            if data: 
+                message = data[0]
+                
+                if(message == "A"):
+                    logger.debug("Request: A.")
+                    if len(Master.UnScheduledSubJobs):
+                        sjb = self.schedule()
+                        self.client.send(pickle.dumps(sbj))
+                    else:
+                        self.client.send("No job to do.")
+                    self.client.close() 
+                
+                elif(message == "H"): #HEART BEAT H123,5645
+                    ID = data[1:]
+                    logger.debug("Request: H, " + ID)
+                    # Put a slave or confirm existence
+                    if(ID == 0):
+                        if len(Master.UnScheduledSubJobs) != 0:
+                            sjb = self.schedule()
+                            self.client.send(sbj)
+                        else:
+                            self.client.send("NO job to do.")
+                    else:
+                        pass
+                    self.client.close() 
+
+                elif(message == "S"): # JOB SUBMISSION
+                    filename = data[1:]
+                    logger.debug("Request: S, " + filename)
+                    with open(filename, "r") as f:
+                        je = pickle.load(f)
+                    self.partitionJob(je)
+                    self.client.close() 
+                    logger.debug("SJBs: " + str(Master.UnScheduledSubJobs))
+                
+                elif(message == "D"): # SUB-JOB COMPLETION
+                    jobID = data[1:] #self.client.recv(self.size)
+                    logger.debug("Request: D, job ID: " + jobID + " done.")
+                    # subjob done
+                    self.client.close() 
                 
                 else: 
+                    logger.debug("Invalid request.")
                     self.client.close() 
-                    running = 0  
+            
+            else: 
+                self.client.close() 
     
     class Scheduler(threading.Thread):
         def __init__(self):
@@ -84,9 +103,9 @@ class Master(object):
             running = 1
             while running:
                 while len(Master.UnScheduledSubJobs) != 0:
-                    schedule()
+                    self.schedule()
 
-        def schedule():
+        def schedule(self):
             while len(Master.Slaves) != 0:
                 sjb = Master.UnScheduledSubJobs.pop()
                 #assign the sub job!
@@ -149,18 +168,3 @@ class Master(object):
 if __name__ == "__main__": 
     s = Master() 
     s.run()
-
-class JobEntry(object):
-    def __init__(self, func, data):
-        self._func = func
-        self._data = data
-
-    def setId(self, id):
-        self._id = id
-
-class SubJobEntry(object):
-    def __init__(self, func, data, jobID, subJobID):
-        self._func       = func
-        self._data       = data
-        self._jobID      = jobID
-        self._subJobID   = subJobID
