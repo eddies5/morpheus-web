@@ -19,6 +19,7 @@
 			},
 			success: function(data) {
 				console.log(data['job_id']);
+				alert('Job ID: ' + data['job_id']);
 			}
 		});
 
@@ -53,6 +54,11 @@
 			},
 			success: function(data) {
 				console.log(data['status']);
+				if (!data['status']) {
+					$('#jobResult').text("not done");
+				} else {
+					$('#jobResult').text("done");
+				}
 			}
 		});
 
