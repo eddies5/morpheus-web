@@ -1,24 +1,107 @@
 #!/usr/bin/env python 
 
-# server socket in python
-# spit out threads (and not processes)
+# MANY THANKS TO http://ilab.cs.byu.edu/python/socket/echoserver.html
 
 import select 
 import socket 
 import sys 
 import threading 
 import pickle
+from collections import deque
+import logging
 
+logger = logging.getLogger('master')
+logger.setLevel(logging.DEBUG)
+
+fh = logging.FileHandler('master.log')
+fh.setLevel(logging.DEBUG)
+
+logger.addHandler(fh)
 
 # master class to partition, schedule jobs
 class Master(object):
+    ScheduledSubJobs = deque()
+    UnScheduledSubJobs = deque()
+    Slaves = deque()
+    
+    class ClientHandler(threading.Thread): 
+        def __init__(self, (client, address)): 
+            threading.Thread.__init__(self) 
+            self.client = client 
+            self.address = address 
+            self.size = 1024 
+
+        def partitionJob(je) :
+            dataParts  = je._data.split('\n')
+            for i, dataPart in enumerate(dataParts) :
+                Master.UnScheduledSubJobs.append(SubJobEntry(je.func, dataParts, je._id, i))
+
+        def run(self): 
+            running = 1 
+            while running: 
+                data = self.client.recv(self.size)
+                if data: 
+                    message = data[0]
+                    
+                    if(message == "H"):
+                        # HEART BEAT!
+                        #self.client.send("Send the ID: ")
+                        ID = data[1:] #self.client.recv(self.size)
+                        logger.debug("Request: H, " + ID)
+                        # CALL SOME METHOD
+                        self.client.close() 
+                        running = 0 
+                    
+                    elif(message == "S"):
+                        filename = data[1:]
+                        je = pickle.load(filename)
+                        logger.debug("Request: S, " + filename)
+                        partitionJob(je)
+                        self.client.close() 
+                        running = 0 
+                    
+                    elif(message == "D"):
+                        jobID = data[1:] #self.client.recv(self.size)
+                        logger.debug("Request: D, job ID: " + jobID + " done.")
+                        # subjob done
+                        self.client.close() 
+                        running = 0
+                    
+                    else: 
+                        logger.debug("Invalid request.")
+                        self.client.close() 
+                        running = 0 
+                
+                else: 
+                    self.client.close() 
+                    running = 0  
+    
+    class Scheduler(threading.Thread):
+        def __init__(self, arg):
+            self.arg = arg
+
+        def run(self):
+            running = 1
+            while running:
+                while len(UnScheduledSubJobs) != 0:
+                    schedule()
+
+        def schedule():
+            # assign a job and remove from UnscheduledSubJobs and 
+            # add to ScheduledSubJobs probably: je._id, i
+            while len(Slaves) != 0:
+                #assign the job!
+            pass
+
+            
     def __init__(self): 
         self.host = 'localhost' 
         self.port = 5000 
         self.backlog = 5 
         self.size = 1024 
         self.server = None 
-        self.threads = [] 
+        self.threads = []
+        self.threads.append(Master.Scheduler)
 
     def open_socket(self): 
         try: 
@@ -30,6 +113,7 @@ class Master(object):
             if self.server: 
                 self.server.close() 
             print "Could not open socket: " + message 
+            logger.debug("Could not open socket: " + message)
             sys.exit(1) 
 
     def run(self): 
@@ -43,7 +127,7 @@ class Master(object):
 
                 if s == self.server: 
                     # handle the server socket: s.accept() returns client, address
-                    c = ClientHandler(self.server.accept()) 
+                    c = Master.ClientHandler(self.server.accept()) 
                     c.start() 
                     self.threads.append(c) 
 
@@ -53,67 +137,11 @@ class Master(object):
                     running = 0 
 
         # close all threads 
-
         self.server.close() 
         for c in self.threads: 
-            c.join() 
+            c.join()
 
 # messages: heartbeat: H (from phone), job submission: S (from eddie), I am done: D (phone)
-
-class ClientHandler(threading.Thread): 
-    def __init__(self, (client, address)): 
-        threading.Thread.__init__(self) 
-        self.client = client 
-        self.address = address 
-        self.size = 1024 
-        self.subJobs = {}
-
-    def partitionJob(je) :
-        subQueue   = Queue()
-        dataParts  = je._data.split('\n')
-        counter    = 0
-        for dataPart in dataParts :
-            self.subJobs[counter] = SubJobEntry(je.func, dataParts, je._id)
-            subQueue.put(counter)
-            counter += 1
-
-        return subQueue
-
-    def run(self): 
-        running = 1 
-        while running: 
-            data = self.client.recv(self.size)
-            if data: 
-                m = data[0]
-                if(m =="H"):
-                    #hearbeat
-                    #print "H"
-                    self.client.close() 
-                    running = 0 
-                elif(m=="S"):
-                    #print "S"
-                    self.client.send("send the filename:")
-                    filename = self.client.recv(self.size)
-                    je = pickle.load(filename)
-                    q = partitionJob(je)
-                    #method that split split the job
-                    self.client.close() 
-                    running = 0 
-                elif(m=="D"):
-                    #print "D"
-                    self.client.send("send the ID:")
-                    jobID = self.client.recv(self.size)
-                    print "job id: ", jobID
-                    # subjob done
-                    self.client.close() 
-                    running = 0
-                else: 
-                    print "else"
-                    self.client.close() 
-                    running = 0 
-            else: 
-                self.client.close() 
-                running = 0 
 
 if __name__ == "__main__": 
     s = Master() 
@@ -127,14 +155,9 @@ class JobEntry(object):
     def setId(self, id):
         self._id = id
 
-    def setSubJobIds(self, ids):
-        self._subJobIds = ids
-
 class SubJobEntry(object):
-    def __init__(self, func, data, id, counter):
-        self._func    = func
-        self._data    = data
-        self._id      = id
-        self._counter = counter
-
-
+    def __init__(self, func, data, jobID, subJobID):
+        self._func       = func
+        self._data       = data
+        self._jobID      = jobID
+        self._subJobID   = subJobID

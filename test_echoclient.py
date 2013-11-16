@@ -1,9 +1,6 @@
 #!/usr/bin/env python
 
-"""
-An echo client that allows the user to send multiple lines to the server.
-Entering a blank line will exit the client.
-"""
+# MANY THANKS TO http://ilab.cs.byu.edu/python/socket/echoserver.html
 
 import socket
 import sys
