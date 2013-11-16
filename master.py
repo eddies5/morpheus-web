@@ -103,7 +103,7 @@ class Master(object):
 
                     jobID, subJobID, result = data[1:].split(',')
                     logger.debug("Request: D, for job ID: " + jobID + ", " + subJobID + " done.")
-                    key = "{jId}.{sjid}".format(jId=sbj._jobID,sjid=sbj._subJobID)
+                    key = "{jId}.{sjid}".format(jId=jobID,sjid=subJobID)
                     Master.scheduledLock.acquire()
                     subJob = Master.ScheduledSubJobs.pop(key, None)
                     Master.scheduledLock.release()
