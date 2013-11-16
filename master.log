@@ -1,0 +1,6 @@
+2013-11-16 07:17:19,363 - MORPHEUS - DEBUG - Request: S, job0
+2013-11-16 07:17:19,379 - MORPHEUS - DEBUG - SJBs: deque([<morpheus.JobEntry.SubJobEntry object at 0x106774990>, <morpheus.JobEntry.SubJobEntry object at 0x106774ad0>, <morpheus.JobEntry.SubJobEntry object at 0x106774cd0>])
+2013-11-16 07:20:26,545 - MORPHEUS - DEBUG - Request: S, job1
+2013-11-16 07:20:26,548 - MORPHEUS - DEBUG - SJBs: deque([<morpheus.JobEntry.SubJobEntry object at 0x1076569d0>, <morpheus.JobEntry.SubJobEntry object at 0x107656990>, <morpheus.JobEntry.SubJobEntry object at 0x107656ad0>])
+2013-11-16 07:26:13,008 - MORPHEUS - DEBUG - Request: S, job2
+2013-11-16 07:26:13,010 - MORPHEUS - DEBUG - SJBs: deque([<morpheus.JobEntry.SubJobEntry object at 0x1012e7990>, <morpheus.JobEntry.SubJobEntry object at 0x1012e7ad0>, <morpheus.JobEntry.SubJobEntry object at 0x1012e7cd0>])
