@@ -51,8 +51,9 @@ def available(request):
     #inform master about new slave
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     s.connect(('localhost', 5000))
-    # s.send('A');
-    # res = s.recv(1024)
+    s.send('A');
+    res = s.recv(1024)
+    pickle.loads(res)
     s.close()
 
-    # return HttpResponse(json.dumps(res), mimetype="application/json")
+    return HttpResponse(json.dumps(res), mimetype="application/json")
