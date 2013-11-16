@@ -50,7 +50,7 @@ def available(request):
     #inform master about new slave
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     s.connect(('localhost', 5000))
-    # s.send(request.GET['uid'])
+    # s.send('A');
     # res = s.recv(1024)
     s.close()
 
