@@ -15,10 +15,11 @@ def job_submit(request):
         print file_name
         with open(file_name, 'w') as fout:
             pickle.dump(job, fout)
-        record = JobRecord(obj_name=file_name)
+        record = JobRecord(obj_name=file_name,status=False)
         record.save()
-
-        return HttpResponse('job saved successfully job_id--->>' + str(number_of_records))
+        print 'primary key---> ' + str(record.pk)
+        print record.status
+        return HttpResponse('save this for your reference  job_id --->>' + str(record.pk))
 
     return HttpResponse("Not a POST request")
 
