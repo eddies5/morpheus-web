@@ -66,20 +66,24 @@ end_string = """
 
 def available(request):
     #inform master about new slave
-    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    s.connect(('localhost', 5000))
-    s.send('A')
-    res = s.recv(1024)
-    data = pickle.loads(res)
-    print data._jobID
-    print data._subJobID
-    print data._data
-    print data._func
+    try:
+        s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        s.connect(('localhost', 5000))
+        s.send('A')
 
-    s.close()
-    function = start_string + data._func + end_string
-    final_data = {'func' : function, 'data' : data._data,
+        res = s.recv(1024)
+        data = pickle.loads(res)
+        print data._jobID
+        print data._subJobID
+        print data._data
+        print data._func
+        s.close()
+        function = start_string + data._func + end_string
+        final_data = {'func' : function, 'data' : data._data,
                     'jobID' : data._jobID, 'subJobID' : data._subJobID}
+    except (socket.error, IndexError) as e:
+        print e
+        final_data = dict()
 
     return HttpResponse(json.dumps(final_data), mimetype="application/json")
 
