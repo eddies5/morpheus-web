@@ -5,6 +5,7 @@ import pickle
 from models import JobRecord
 import socket
 import json
+from dwolla import DwollaUser
 
 def job_submit(request):
     
@@ -51,9 +52,28 @@ def available(request):
     #inform master about new slave
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     s.connect(('localhost', 5000))
-    s.send('A');
+    s.send('A')
     res = s.recv(1024)
     pickle.loads(res)
     s.close()
 
     return HttpResponse(json.dumps(res), mimetype="application/json")
+
+def completion(request):
+    # job_id, subjobid, result
+    # phone number
+    # s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    # s.connect(('localhost', 5000))
+    # s.send('D')
+    # s.send(request.GET['job_id'])
+    # s.send(request.GET['subjobid'])
+    # s.send(request.GET['result'])
+    # request.GET['phonenumber']
+    # s.close()
+
+    dw = DwollaUser('CQOdqAEDtrRgUqPXdMmT4UL2BiCH6QPYX59mKelw6tKaN90uOH')
+
+    transactionId = dw.send_funds(0.01, '812-908-5908', '4810')
+    print transactionId
+    
+    return HttpResponse(json.dumps({}), mimetype="application/json")
