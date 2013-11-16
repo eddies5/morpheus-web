@@ -48,7 +48,6 @@ def check_status(request):
     return HttpResponse(json.dumps(res), mimetype="application/json")
 
 def available(request):
-    print request.GET['uid']
     #inform master about new slave
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     s.connect(('localhost', 5000))
