@@ -12,7 +12,9 @@ def job_submit(request):
                     request.GET.get('data', None))
     #save file into object file
     number_of_records = JobRecord.objects.filter().count()
+    file_name = 'job' + str(number_of_records)
     print file_name
+
     with open(file_name, 'w') as fout:
         pickle.dump(job, fout)
     record = JobRecord(obj_name=file_name,status=False)
