@@ -12,13 +12,10 @@ import logging
 
 logger = logging.getLogger('master')
 logger.setLevel(logging.DEBUG)
-
 fh = logging.FileHandler('master.log')
 fh.setLevel(logging.DEBUG)
-
 logger.addHandler(fh)
 
-# master class to partition, schedule jobs
 class Master(object):
     ScheduledSubJobs = deque()
     UnScheduledSubJobs = deque()
@@ -43,16 +40,14 @@ class Master(object):
                 if data: 
                     message = data[0]
                     
-                    if(message == "H"):
-                        # HEART BEAT!
-                        #self.client.send("Send the ID: ")
-                        ID = data[1:] #self.client.recv(self.size)
+                    if(message == "H"): #HEART BEAT
+                        ID = data[1:]
                         logger.debug("Request: H, " + ID)
                         # CALL SOME METHOD
                         self.client.close() 
                         running = 0 
                     
-                    elif(message == "S"):
+                    elif(message == "S"): # JOB SUBMISSION
                         filename = data[1:]
                         je = pickle.load(filename)
                         logger.debug("Request: S, " + filename)
@@ -60,7 +55,7 @@ class Master(object):
                         self.client.close() 
                         running = 0 
                     
-                    elif(message == "D"):
+                    elif(message == "D"): # SUB-JOB COMPLETION
                         jobID = data[1:] #self.client.recv(self.size)
                         logger.debug("Request: D, job ID: " + jobID + " done.")
                         # subjob done
@@ -77,21 +72,23 @@ class Master(object):
                     running = 0  
     
     class Scheduler(threading.Thread):
-        def __init__(self, arg):
-            self.arg = arg
+        def __init__(self):
+            threading.Thread.__init__(self)
+            logger.debug("Created a scheduler.")
 
         def run(self):
             running = 1
             while running:
-                while len(UnScheduledSubJobs) != 0:
+                while len(Master.UnScheduledSubJobs) != 0:
                     schedule()
 
         def schedule():
-            # assign a job and remove from UnscheduledSubJobs and 
-            # add to ScheduledSubJobs probably: je._id, i
-            while len(Slaves) != 0:
-                #assign the job!
-            pass
+            while len(Master.Slaves) != 0:
+                sjb = Master.UnScheduledSubJobs.pop()
+                #assign the sub job!
+                Master.ScheduledSubJobs.append(sbj)
+                logger.debug("Job Scheduled: Job ID: " + sbj._jobID + "subJob ID: " + sbj._subJobID)
+                break
 
             
     def __init__(self): 
@@ -101,7 +98,9 @@ class Master(object):
         self.size = 1024 
         self.server = None 
         self.threads = []
-        self.threads.append(Master.Scheduler)
+        s = Master.Scheduler()
+        s.start()
+        self.threads.append(s)
 
     def open_socket(self): 
         try: 
