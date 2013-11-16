@@ -90,6 +90,7 @@ def send_money(phone_number):
     try:
         dw = DwollaUser('CQOdqAEDtrRgUqPXdMmT4UL2BiCH6QPYX59mKelw6tKaN90uOH')
         transactionId = dw.send_funds(0.01, phone_number, '4810', dest_type='Phone')
+        print 'Sending file'
         print transactionId
     except Exception as e:
         print 'Failed to send money --> ' + str(e)
