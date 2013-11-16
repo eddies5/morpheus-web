@@ -6,9 +6,6 @@ from models import JobRecord
 import socket
 import json
 
-
-
-# Create your views here.
 def job_submit(request):
     
     #save file into object file
@@ -48,3 +45,14 @@ def check_status(request):
         res['status'] = job[0].status
 
     return HttpResponse(json.dumps(res), mimetype="application/json")
+
+def available(request):
+    print request.GET['uid']
+    #inform master about new slave
+    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    s.connect(('localhost', 5000))
+    # s.send('A');
+    # res = s.recv(1024)
+    s.close()
+
+    # return HttpResponse(json.dumps(res), mimetype="application/json")
